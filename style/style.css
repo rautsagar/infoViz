@@ -6,3 +6,8 @@ svg{
     stroke-width: 5;
     /*background-color: red;*/
 }
+
+#container{
+	width: 50%;
+	margin: 0px auto;
+}

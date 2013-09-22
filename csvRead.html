@@ -4,51 +4,86 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Readin from CSV</title>
+		<link rel="stylesheet" type="text/css" href="style/style.css" />
+
+		<script src="js/jquery-2.0.3.js"></script>
 		<script src="d3/d3.v3.js"></script>
 		<script>
-			getFromCSV("sales", "region");
-
-			function getFromCSV(X, Y) {
-				d3.csv('a3-CoffeeData.csv', function(data) {
-					//console.log((getNumberOfCategories(data, Y)).length);
-					var arrayOfY = getNumberOfCategories(data, Y);
-					var resultJSON = {};
-					for(var j = 0; j < arrayOfY.length; j++) {
-						var sumOfX = 0;
-
-						for (var i = 0; i < data.length; i++) {
-							var obj = data[i];
-							if(obj[Y] == arrayOfY[j]){
-								sumOfX += parseInt(obj[X])	;
-							}
-							// if(data[i].region == "Central"){
-							// centralSales += parseInt(data[i].sales);
-							//
-							// };
-						}
-						// console.log("sales for the central region is : ", centralSales );
-						resultJSON[arrayOfY[j]] = sumOfX;
-					}
-					console.log(JSON.stringify(resultJSON));
+			$(document).ready(function() {
+				
+				$("button#update").click( function(){
+					var X = $("#xdropdown").val();
+					var Y = $("#ydropdown").val();
+					
+					getFromCSV(X, Y);
 				});
-			}
-
-			function getNumberOfCategories(data, Y) {
-				var categoryArray = [];
 				
 
-				for (var i = 0; i < data.length; i++) {
-					var obj = data[i];
-					//console.log(obj[Y]);
-					if (categoryArray.indexOf(obj[Y]) < 0) {
-						categoryArray.push(obj[Y]);
-					}
+				function getFromCSV(X, Y) {
+					d3.csv('a3-CoffeeData.csv', function(data) {
+
+						var arrayOfY = getNumberOfCategories(data, Y);
+						var resultJSON = {};
+						for (var j = 0; j < arrayOfY.length; j++) {
+							var sumOfX = 0;
+
+							for (var i = 0; i < data.length; i++) {
+								var obj = data[i];
+								if (obj[Y] == arrayOfY[j]) {
+									sumOfX += parseInt(obj[X]);
+								}
+
+							}
+
+							resultJSON[arrayOfY[j]] = sumOfX;
+						}
+						console.log(JSON.stringify(resultJSON));
+					});
 				}
-				
-				return categoryArray;
-			}
+
+				function getNumberOfCategories(data, Y) {
+					var categoryArray = [];
+
+					for (var i = 0; i < data.length; i++) {
+						var obj = data[i];
+
+						if (categoryArray.indexOf(obj[Y]) < 0) {
+							categoryArray.push(obj[Y]);
+						}
+					}
+
+					return categoryArray;
+				}
+
+			});
 
 		</script>
 
 	</head>
+	<body>
+
+		<div id="container">
+			<div id="controls">
+				<label>X:</label>
+				<select id="xdropdown">
+					<option val="sales">sales</option>
+					<option val="profit">profit</option>
+				</select>
+
+				<label>Y:</label>
+				<select id="ydropdown">
+					<option val="region">region</option>
+					<option val="category">category</option>
+				</select>
+
+				<button name="refresh" id="update">
+					Update
+				</button>
+			</div>
+			<div id="graphArea">
+
+			</div>
+		</div>
+
+	</body>
 </html>
