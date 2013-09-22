@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8" />
+		<title>Readin from CSV</title>
+		<script src="d3/d3.v3.js"></script>
+		<script>
+			getFromCSV("sales", "region");
+
+			function getFromCSV(X, Y) {
+				d3.csv('a3-CoffeeData.csv', function(data) {
+					//console.log((getNumberOfCategories(data, Y)).length);
+					var arrayOfY = getNumberOfCategories(data, Y);
+					var resultJSON = {};
+					for(var j = 0; j < arrayOfY.length; j++) {
+						var sumOfX = 0;
+
+						for (var i = 0; i < data.length; i++) {
+							var obj = data[i];
+							if(obj[Y] == arrayOfY[j]){
+								sumOfX += parseInt(obj[X])	;
+							}
+							// if(data[i].region == "Central"){
+							// centralSales += parseInt(data[i].sales);
+							//
+							// };
+						}
+						// console.log("sales for the central region is : ", centralSales );
+						resultJSON[arrayOfY[j]] = sumOfX;
+					}
+					console.log(JSON.stringify(resultJSON));
+				});
+			}
+
+			function getNumberOfCategories(data, Y) {
+				var categoryArray = [];
+				
+
+				for (var i = 0; i < data.length; i++) {
+					var obj = data[i];
+					//console.log(obj[Y]);
+					if (categoryArray.indexOf(obj[Y]) < 0) {
+						categoryArray.push(obj[Y]);
+					}
+				}
+				
+				return categoryArray;
+			}
+
+		</script>
+
+	</head>
+</html>
