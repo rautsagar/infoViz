@@ -1,9 +1,9 @@
 
 
 svg{
-	fill: yellow;
-    stroke: orange;
-    stroke-width: 5;
+	
+	display:block;
+    padding-left: 10px;
     /*background-color: red;*/
 }
 
@@ -11,3 +11,10 @@ svg{
 	width: 50%;
 	margin: 0px auto;
 }
+
+.bar{
+	fill: yellow;
+    stroke: orange;
+    stroke-width: 5;
+}
+

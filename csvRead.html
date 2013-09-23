@@ -3,27 +3,30 @@
 
 	<head>
 		<meta charset="UTF-8" />
-		<title>Readin from CSV</title>
+		<title>Reading from CSV</title>
 		<link rel="stylesheet" type="text/css" href="style/style.css" />
 
 		<script src="js/jquery-2.0.3.js"></script>
 		<script src="d3/d3.v3.js"></script>
 		<script>
 			$(document).ready(function() {
-				
-				$("button#update").click( function(){
+
+				$("button#update").click(function() {
 					var X = $("#xdropdown").val();
 					var Y = $("#ydropdown").val();
-					
+					// var result = {};
 					getFromCSV(X, Y);
+					//console.log(JSON.stringify(result));
+
 				});
-				
 
 				function getFromCSV(X, Y) {
-					d3.csv('a3-CoffeeData.csv', function(data) {
 
-						var arrayOfY = getNumberOfCategories(data, Y);
+					resultJSON = d3.csv('a3-CoffeeData.csv', function(data) {
+
 						var resultJSON = {};
+						var arrayOfY = getNumberOfCategories(data, Y);
+
 						for (var j = 0; j < arrayOfY.length; j++) {
 							var sumOfX = 0;
 
@@ -37,11 +40,13 @@
 
 							resultJSON[arrayOfY[j]] = sumOfX;
 						}
-						console.log(JSON.stringify(resultJSON));
+						drawBarChart(resultJSON);
+
 					});
+
 				}
 
-				function getNumberOfCategories(data, Y) {
+			 function getNumberOfCategories(data, Y) {
 					var categoryArray = [];
 
 					for (var i = 0; i < data.length; i++) {
@@ -56,6 +61,72 @@
 				}
 
 			});
+
+			function drawBarChart(resultJSON) {
+				$("svg").remove();
+				var maxValue = 0;
+				var h = 500;
+				var w = 100;
+				var padding = 30;
+				
+				for (var keyz in resultJSON) {
+					var attrName = keyz;
+					var attrValue = resultJSON[keyz];
+					
+					if(attrValue > maxValue){
+						maxValue = attrValue;
+					};
+					console.log(attrName, attrValue);
+					
+				}
+				
+				console.log("MaxValue is:", maxValue);
+				
+				var xScale = d3.scale.linear()
+                     .domain([maxValue, 0])
+                     .range([0, h]);
+                     
+                var xAxis = d3.svg.axis()
+                  .scale(xScale)
+                  .orient("right");
+     
+				
+				var svg = d3.select("#graphArea").append("svg").attr("width",700).attr("height", 700);
+				
+				svg.append("g")
+						.attr("class", "axis")
+						.call(xAxis)
+						.attr("transform", "translate(" + padding + ","+ (padding) +")");
+						
+				
+				var dataset = d3.entries(resultJSON);
+				
+						
+				svg.selectAll("rect")
+					.data(dataset)
+					.enter()
+					.append("rect")
+					.attr("class", "bar")
+					.attr("x", function(d,i){
+						return padding+100+(i*(w+10));
+					})
+					.attr("y", function(d){
+						return (h-((d.value/maxValue)*500))+padding;
+					})
+					.attr("width" , w)
+					.attr("height", function(d,i){
+						return ((d.value/maxValue)*500);
+					} );
+					
+						
+				 
+				    
+					
+					
+					
+					
+
+			}
 
 		</script>
 
