@@ -95,6 +95,8 @@
 				
 				var dataset = d3.entries(resultJSON);
 				var noOfCategories = dataset.length;
+				var width;
+				if(noOfCategories>4){width = 1700;}else{width = 700;}
 				
 				var xScale = d3.scale.linear()
                      .domain([maxValue, 0])
@@ -113,7 +115,7 @@
 
 				var yAxis = d3.svg.axis().scale(yScale).orient("bottom");
 				
-				var svg = d3.select("#graphArea").append("svg").attr("width",1700).attr("height", 700);
+				var svg = d3.select("#graphArea").append("svg").attr("width",width).attr("height", 700);
 				
 				svg.append("g")
 						.attr("class", "axis")
@@ -173,7 +175,7 @@
 
 				<label>Y:</label>
 				<select id="ydropdown">
-					<option val="region">region</option>
+					<option val="region" selected="selected">region</option>
 					<option val="category">category</option>
 					<option val="caffeination">caffeination</option>
 					<option val="type">type</option>
