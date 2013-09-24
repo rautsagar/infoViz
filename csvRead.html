@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<title>Reading from CSV</title>
-		<link rel="stylesheet" type="text/css" href="style/style.css" />
+		<link id="cssId" rel="stylesheet" type="text/css" href="style/style.css" />
 
 		<script src="js/jquery-2.0.3.js"></script>
 		<script src="d3/d3.v3.js"></script>
@@ -12,8 +12,15 @@
 			$(document).ready(function() {
 
 				$("button#update").click(function() {
+					
 					var X = $("#xdropdown").val();
 					var Y = $("#ydropdown").val();
+					
+					if(Y == "category"){
+						$("#cssId").attr("href", "style/style2.css");
+					}else{
+						$("#cssId").attr("href", "style/style.css");
+						}
 					// var result = {};
 					getFromCSV(X, Y);
 					//console.log(JSON.stringify(result));
@@ -69,8 +76,12 @@
 				var w = 100;
 				var padding = 30;
 				
+				
+				
+				var keys = [];
 				for (var keyz in resultJSON) {
 					var attrName = keyz;
+					keys.push(attrName);
 					var attrValue = resultJSON[keyz];
 					
 					if(attrValue > maxValue){
@@ -82,6 +93,9 @@
 				
 				console.log("MaxValue is:", maxValue);
 				
+				var dataset = d3.entries(resultJSON);
+				var noOfCategories = dataset.length;
+				
 				var xScale = d3.scale.linear()
                      .domain([maxValue, 0])
                      .range([0, h]);
@@ -89,9 +103,17 @@
                 var xAxis = d3.svg.axis()
                   .scale(xScale)
                   .orient("right");
-     
+                  
+                //console.log("dataset",dataset.length); 
+                
+                 
+                var yScale = d3.scale.ordinal()
+    							.domain(keys)
+    							.rangeRoundBands([0, ((w+20)*noOfCategories)], 0); 
+
+				var yAxis = d3.svg.axis().scale(yScale).orient("bottom");
 				
-				var svg = d3.select("#graphArea").append("svg").attr("width",700).attr("height", 700);
+				var svg = d3.select("#graphArea").append("svg").attr("width",1700).attr("height", 700);
 				
 				svg.append("g")
 						.attr("class", "axis")
@@ -99,7 +121,12 @@
 						.attr("transform", "translate(" + padding + ","+ (padding) +")");
 						
 				
-				var dataset = d3.entries(resultJSON);
+				svg.append("g")
+						.attr("class", "axisBottom")
+						.call(yAxis)
+						.attr("transform", "translate(" + (padding+95) + ","+ (h+30) +")");		
+				
+				
 				
 						
 				svg.selectAll("rect")
@@ -108,7 +135,7 @@
 					.append("rect")
 					.attr("class", "bar")
 					.attr("x", function(d,i){
-						return padding+100+(i*(w+10));
+						return padding+100+(i*(w+20));
 					})
 					.attr("y", function(d){
 						return (h-((d.value/maxValue)*500))+padding;
@@ -119,9 +146,12 @@
 					} );
 					
 						
-				 
+				 var yAxis = d3.svg.axis()
+    				.scale(xScale)
+    				.tickFormat(function(d) { return dataset[d].key; })
+   					.orient("bottom");
 				    
-					
+				 
 					
 					
 					
@@ -145,6 +175,8 @@
 				<select id="ydropdown">
 					<option val="region">region</option>
 					<option val="category">category</option>
+					<option val="caffeination">caffeination</option>
+					<option val="type">type</option>
 				</select>
 
 				<button name="refresh" id="update">
