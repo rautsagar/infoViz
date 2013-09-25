@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-	<head>
-		<meta charset="UTF-8" />
-		<title>Reading from CSV</title>
-		<link id="cssId" rel="stylesheet" type="text/css" href="style/style.css" />
-
-		<script src="js/jquery-2.0.3.js"></script>
-		<script src="d3/d3.v3.js"></script>
-		<script>
-			$(document).ready(function() {
+$(document).ready(function() {
 
 				$("button#update").click(function() {
 					
@@ -27,6 +16,15 @@
 
 				});
 
+
+/* This function takes input X & Y, which are the field names of the CSV file, and creates a JSON array of output values 
+eg: resultJSON =  {"Central": "265045",
+ 					"East":"178576",
+ 					"South":"103926",
+ 					"West":"272264"
+ 					}
+ */	
+ 				
 				function getFromCSV(X, Y) {
 
 					resultJSON = d3.csv('a3-CoffeeData.csv', function(data) {
@@ -47,12 +45,13 @@
 
 							resultJSON[arrayOfY[j]] = sumOfX;
 						}
-						drawBarChart(resultJSON);
+						drawBarChart(resultJSON);     //call function to draw the bar chart
 
 					});
 
 				}
-
+				
+ //This function counts the number of categories on the Y (The horizontal) Axis
 			 function getNumberOfCategories(data, Y) {
 					var categoryArray = [];
 
@@ -69,6 +68,7 @@
 
 			});
 
+//This function actually draws the bar chart
 			function drawBarChart(resultJSON) {
 				$("svg").remove();
 				var maxValue = 0;
@@ -159,36 +159,3 @@
 					
 
 			}
-
-		</script>
-
-	</head>
-	<body>
-
-		<div id="container">
-			<div id="controls">
-				<label>X:</label>
-				<select id="xdropdown">
-					<option val="sales">sales</option>
-					<option val="profit">profit</option>
-				</select>
-
-				<label>Y:</label>
-				<select id="ydropdown">
-					<option val="region" selected="selected">region</option>
-					<option val="category">category</option>
-					<option val="caffeination">caffeination</option>
-					<option val="type">type</option>
-				</select>
-
-				<button name="refresh" id="update">
-					Update
-				</button>
-			</div>
-			<div id="graphArea">
-
-			</div>
-		</div>
-
-	</body>
-</html>

@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>D3 Test</title>
-        <script type="text/javascript" src="d3/d3.v3.js"></script>
-        <link rel="stylesheet" type="text/css" href="style/style.css" />
-    </head>
-    <body>
-        <script type="text/javascript">
-            var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
-                11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
-                
-                //Width and height
-var w = 500;
-var h = 100;
-var x = 0;
 
-//Create SVG element
-var svg = d3.select("body")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
-            
-svg.selectAll("rect")
-   .data(dataset)
-   .enter()
-   .append("rect")
-   .attr("x", function(d, i) {
-    return i * 21;  //Bar width of 20 plus 1 for padding
-})
-   .attr("y", 0)
-   .attr("width", 20)
-   .attr("height", 100);
+	<head>
+		<meta charset="UTF-8" />
+		<title>Barcharts using D3</title>
+		
+		<link id="cssId" rel="stylesheet" type="text/css" href="style/style.css" />
 
+		<script src="js/jquery-2.0.3.js"></script> <!-- Jquery used to make selection of elements easy -->
+		<script src="d3/d3.v3.js"></script>
+		<script src="js/ChartScript.js"></script> <!-- The script file where all the calculation and D3 code is -->
 
-            
-        </script>
-        
-    </body>
+	</head>
+	<body>
+
+		<div id="container">
+			<div id="controls">
+				<label>X:</label>
+				<select id="xdropdown">
+					<option val="sales">sales</option>
+					<option val="profit">profit</option>
+				</select>
+
+				<label>Y:</label>
+				<select id="ydropdown">
+					<option val="region" selected="selected">region</option>
+					<option val="category">category</option>
+					<option val="caffeination">caffeination</option>
+					<option val="type">type</option>
+				</select>
+
+				<button name="refresh" id="update">
+					Update
+				</button>
+			</div>
+			<div id="graphArea">
+
+			</div>
+		</div>
+
+	</body>
 </html>
